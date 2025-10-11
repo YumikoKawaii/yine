@@ -3,7 +3,7 @@ module yumiko_kawaii.com/yine
 go 1.24.6
 
 require (
-	github.com/YumikoKawaii/rpc.com v0.0.20251010090402
+	github.com/YumikoKawaii/rpc.com v0.0.20251011173722
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.2
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.3

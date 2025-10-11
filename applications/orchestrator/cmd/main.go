@@ -12,8 +12,13 @@ func main() {
 	}
 
 	cmd.AddCommand(&cobra.Command{
-		Use: "server",
-		Run: serve.Serve,
+		Use: "receiver",
+		Run: serve.ServeReceiver,
+	})
+
+	cmd.AddCommand(&cobra.Command{
+		Use: "streamer",
+		Run: serve.ServeStreamer,
 	})
 
 	if err := cmd.Execute(); err != nil {

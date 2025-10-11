@@ -57,8 +57,8 @@ type Server struct {
 func NewServer(cfg Config, opt ...grpc.ServerOption) *Server {
 	return &Server{
 		gRPC: grpc.NewServer(opt...),
-		mux: runtime.NewServeMux(
-			//gatewayopt.ProtoJSONMarshaler(),
+		mux:  runtime.NewServeMux(
+		//gatewayopt.ProtoJSONMarshaler(),
 		),
 		cfg: cfg,
 	}
@@ -66,11 +66,10 @@ func NewServer(cfg Config, opt ...grpc.ServerOption) *Server {
 
 func (s *Server) Register(grpcServer ...interface{}) error {
 	for _, srv := range grpcServer {
-		isNotMatched := true
-		if orchestratorSv, ok := srv.(api.OrchestratorServer); ok {
-			isNotMatched = false
-			api.RegisterOrchestratorServer(s.gRPC, orchestratorSv)
-			if err := api.RegisterOrchestratorHandlerFromEndpoint(
+		switch _srv := srv.(type) {
+		case api.ReceiverServer:
+			api.RegisterReceiverServer(s.gRPC, _srv)
+			if err := api.RegisterReceiverHandlerFromEndpoint(
 				context.Background(),
 				s.mux,
 				s.cfg.GRPC.String(),
@@ -78,9 +77,9 @@ func (s *Server) Register(grpcServer ...interface{}) error {
 			); err != nil {
 				return err
 			}
-		}
-
-		if isNotMatched {
+		case api.StreamerServer:
+			api.RegisterStreamerServer(s.gRPC, _srv)
+		default:
 			return fmt.Errorf("unknown GRPC Service to register %#v", srv)
 		}
 	}

@@ -1,14 +1,13 @@
-package apis
+package receiver
 
 import (
 	"context"
 
 	api "github.com/YumikoKawaii/rpc.com/protobuf/orchestrator"
-	"google.golang.org/grpc"
 )
 
 type Handler struct {
-	api.UnimplementedOrchestratorServer
+	api.ReceiverServer
 }
 
 func NewHandler() *Handler {
@@ -19,6 +18,6 @@ func (h *Handler) SendMessage(ctx context.Context, request *api.SendMessageReque
 	return nil, nil
 }
 
-func (h *Handler) ReceiveMessages(request *api.ReceiveMessagesRequest, stream grpc.ServerStreamingServer[api.Message]) error {
-	return nil
-}
+//func (h *Handler) ReceiveMessages(request *api.ReceiveMessagesRequest, stream grpc.ServerStreamingServer[api.Message]) error {
+//	return nil
+//}
