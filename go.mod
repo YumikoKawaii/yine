@@ -3,7 +3,7 @@ module yumiko_kawaii.com/yine
 go 1.24.6
 
 require (
-	github.com/YumikoKawaii/rpc.com v0.0.20251011173722
+	github.com/YumikoKawaii/rpc.com v0.0.20251012144514
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.2
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.3
@@ -17,6 +17,7 @@ require (
 )
 
 require (
+	github.com/YumikoKawaii/shared v0.0.20251012094015 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/envoyproxy/protoc-gen-validate v1.2.1 // indirect
@@ -30,6 +31,7 @@ require (
 	github.com/prometheus/procfs v0.16.1 // indirect
 	github.com/rogpeppe/go-internal v1.13.1 // indirect
 	github.com/sagikazarmark/locafero v0.11.0 // indirect
+	github.com/samber/lo v1.52.0 // indirect
 	github.com/sourcegraph/conc v0.3.1-0.20240121214520-5f936abd7ae8 // indirect
 	github.com/spf13/afero v1.15.0 // indirect
 	github.com/spf13/cast v1.10.0 // indirect

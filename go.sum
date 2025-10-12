@@ -2,6 +2,18 @@ github.com/YumikoKawaii/rpc.com v0.0.20251011173406 h1:zyLWSAprm6LEUC8pchJbKKLcV
 github.com/YumikoKawaii/rpc.com v0.0.20251011173406/go.mod h1:Ww9tu7055DcsIa+lmOvX/1zYrM0IxOzLJN5j5dThK1o=
 github.com/YumikoKawaii/rpc.com v0.0.20251011173722 h1:Ek6aB/4keGKa/3O5b7Sf91kqL+UPe7ZSSWYxprOANGk=
 github.com/YumikoKawaii/rpc.com v0.0.20251011173722/go.mod h1:Ww9tu7055DcsIa+lmOvX/1zYrM0IxOzLJN5j5dThK1o=
+github.com/YumikoKawaii/rpc.com v0.0.20251012142017 h1:zXIuv0ezGAJi8FiDXbU6tNkgswSB8AM+cslTDm+TOS8=
+github.com/YumikoKawaii/rpc.com v0.0.20251012142017/go.mod h1:Ww9tu7055DcsIa+lmOvX/1zYrM0IxOzLJN5j5dThK1o=
+github.com/YumikoKawaii/rpc.com v0.0.20251012142459 h1:BmhKrcqVkYYuzx9ZZwyF+pVS6/1ZeL3+W0FoN5/ErvU=
+github.com/YumikoKawaii/rpc.com v0.0.20251012142459/go.mod h1:Ww9tu7055DcsIa+lmOvX/1zYrM0IxOzLJN5j5dThK1o=
+github.com/YumikoKawaii/rpc.com v0.0.20251012144153 h1:uHbvfJxDSzkl6u1378I4JC2u8FRocS7Z05LQiwEcEzA=
+github.com/YumikoKawaii/rpc.com v0.0.20251012144153/go.mod h1:Ww9tu7055DcsIa+lmOvX/1zYrM0IxOzLJN5j5dThK1o=
+github.com/YumikoKawaii/rpc.com v0.0.20251012144514 h1:wZzx1OleRZsD/mEywJO4G4QVpzmtHEYahsw6AeOZ0d4=
+github.com/YumikoKawaii/rpc.com v0.0.20251012144514/go.mod h1:Ww9tu7055DcsIa+lmOvX/1zYrM0IxOzLJN5j5dThK1o=
+github.com/YumikoKawaii/shared v0.0.20251012090656 h1:PZ/J92RmscIos5WX9nCZwJdQVVjFdhoVSwDcMNbimSM=
+github.com/YumikoKawaii/shared v0.0.20251012090656/go.mod h1:5utRtBSJ4LAbun6+dPKDAjCoAdMV0g6Gt4vnXC+qmYs=
+github.com/YumikoKawaii/shared v0.0.20251012094015 h1:I+t2DEVIObY7iF96sIzqAMM5/cWmh37aj4YPZyJiA7A=
+github.com/YumikoKawaii/shared v0.0.20251012094015/go.mod h1:5utRtBSJ4LAbun6+dPKDAjCoAdMV0g6Gt4vnXC+qmYs=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=
 github.com/beorn7/perks v1.0.1/go.mod h1:G2ZrVWU2WbWT9wwq4/hrbKbnv/1ERSJQ0ibhJ6rlkpw=
 github.com/cespare/xxhash/v2 v2.3.0 h1:UL815xU9SqsFlibzuggzjXhog7bL6oX9BbNZnL2UFvs=
@@ -64,6 +76,8 @@ github.com/rogpeppe/go-internal v1.13.1/go.mod h1:uMEvuHeurkdAXX61udpOXGD/AzZDWN
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
 github.com/sagikazarmark/locafero v0.11.0 h1:1iurJgmM9G3PA/I+wWYIOw/5SyBtxapeHDcg+AAIFXc=
 github.com/sagikazarmark/locafero v0.11.0/go.mod h1:nVIGvgyzw595SUSUE6tvCp3YYTeHs15MvlmU87WwIik=
+github.com/samber/lo v1.52.0 h1:Rvi+3BFHES3A8meP33VPAxiBZX/Aws5RxrschYGjomw=
+github.com/samber/lo v1.52.0/go.mod h1:4+MXEGsJzbKGaUEQFKBq2xtfuznW9oz/WrgyzMzRoM0=
 github.com/sourcegraph/conc v0.3.1-0.20240121214520-5f936abd7ae8 h1:+jumHNA0Wrelhe64i8F6HNlS8pkoyMv5sreGx2Ry5Rw=
 github.com/sourcegraph/conc v0.3.1-0.20240121214520-5f936abd7ae8/go.mod h1:3n1Cwaq1E1/1lhQhtRK2ts/ZwZEhjcQeJQ1RuC6Q/8U=
 github.com/spf13/afero v1.15.0 h1:b/YBCLWAJdFWJTN9cLhiXXcD7mzKn9Dm86dNnfyQw1I=
