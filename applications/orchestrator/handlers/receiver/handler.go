@@ -23,8 +23,12 @@ type Handler struct {
 	worker           uow.IWorker
 }
 
-func NewHandler() *Handler {
-	return &Handler{}
+func NewHandler(connRegistry connection_registry.Registry, messagePublisher pubsub.Publisher, worker uow.IWorker) *Handler {
+	return &Handler{
+		connRegistry:     connRegistry,
+		messagePublisher: messagePublisher,
+		worker:           worker,
+	}
 }
 
 func (h *Handler) SendMessage(ctx context.Context, request *api.SendMessageRequest) (*api.SendMessageResponse, error) {
