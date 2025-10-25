@@ -4,15 +4,18 @@ import (
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/recovery"
 	grpc_validator "github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/validator"
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
+	"yumiko_kawaii.com/yine/applications/orchestrator/handlers/connection_registry"
 	"yumiko_kawaii.com/yine/applications/orchestrator/handlers/receiver"
 	"yumiko_kawaii.com/yine/applications/orchestrator/handlers/streamer"
 
+	"github.com/YumikoKawaii/shared/pubsub"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
 	"yumiko_kawaii.com/yine/applications/orchestrator/config"
 	"yumiko_kawaii.com/yine/applications/orchestrator/pkg/logger"
+	"yumiko_kawaii.com/yine/applications/orchestrator/pkg/repository/uow"
 	"yumiko_kawaii.com/yine/applications/orchestrator/server"
 )
 
@@ -26,6 +29,28 @@ func ServeReceiver(_ *cobra.Command, _ []string) {
 	if err != nil {
 		logger.WithFields(logger.Fields{"error": err}).Fatalf("Error initializing logger")
 	}
+
+	// Initialize database
+	db, err := initDatabase(conf.Database)
+	if err != nil {
+		l.WithFields(logger.Fields{"error": err}).Fatalf("Error initializing database")
+	}
+
+	// Initialize Redis
+	redisClient, err := initRedis(conf.Redis)
+	if err != nil {
+		l.WithFields(logger.Fields{"error": err}).Fatalf("Error initializing Redis")
+	}
+	defer redisClient.Close()
+
+	// Initialize dependencies
+	worker := uow.New(db)
+	connRegistry := connection_registry.NewRedisRegistryWithTTL(redisClient, conf.Redis.TTL)
+
+	// Initialize pubsub publisher
+	// TODO: Initialize pubsub.Publisher based on shared package implementation
+	// For now, using nil - this should be replaced with actual implementation
+	var messagePublisher pubsub.Publisher
 
 	zapLogger := l.GetDelegate().(*zap.SugaredLogger).Desugar()
 
@@ -45,7 +70,7 @@ func ServeReceiver(_ *cobra.Command, _ []string) {
 		),
 	)
 
-	srv := receiver.NewHandler()
+	srv := receiver.NewHandler(connRegistry, messagePublisher, worker)
 
 	if err = s.Register(
 		srv,
@@ -57,7 +82,7 @@ func ServeReceiver(_ *cobra.Command, _ []string) {
 		WithFields(logger.Fields{"grpc_port": conf.Server.GRPC.Port}).
 		WithFields(logger.Fields{"http_addr": conf.Server.HTTP.Host}).
 		WithFields(logger.Fields{"http_port": conf.Server.HTTP.Port}).
-		Infof("Starting server...")
+		Infof("Starting receiver server...")
 
 	if err = s.Serve(); err != nil {
 		l.WithFields(logger.Fields{"error": err}).Fatalf("Error starting server")

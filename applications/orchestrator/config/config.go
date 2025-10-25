@@ -6,14 +6,18 @@ import (
 )
 
 type Config struct {
-	Server server.Config
-	Logger logger.Configuration
+	Server   server.Config
+	Logger   logger.Configuration
+	Redis    RedisConfig
+	Database DatabaseConfig
 }
 
 func loadDefaultConfig() *Config {
 	c := &Config{
-		Server: server.DefaultConfig(),
-		Logger: logger.DefaultConfig(),
+		Server:   server.DefaultConfig(),
+		Logger:   logger.DefaultConfig(),
+		Redis:    DefaultRedisConfig(),
+		Database: DefaultDatabaseConfig(),
 	}
 	return c
 }
