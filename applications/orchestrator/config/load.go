@@ -39,14 +39,14 @@ func Load() (*Config, error) {
 	|-----------------------------------------------------------------------*/
 	c := loadDefaultConfig()
 	if configBuffer, err := json.Marshal(c); err != nil {
-		log.Println("Oops! Marshal config is failed. ", err)
+		log.Printf("[CONFIG] Failed to marshal default config: %v", err)
 		return nil, err
 	} else if err := viper.ReadConfig(bytes.NewBuffer(configBuffer)); err != nil {
-		log.Println("Oops! Read default config is failed. ", err)
+		log.Printf("[CONFIG] Failed to read default config: %v", err)
 		return nil, err
 	}
 	if err := viper.MergeInConfig(); err != nil {
-		log.Println("Read config file failed.", err)
+		log.Printf("[CONFIG] Failed to merge config file (using defaults): %v", err)
 	}
 	// Populate all config again
 	err := viper.Unmarshal(c)

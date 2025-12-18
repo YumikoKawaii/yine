@@ -28,10 +28,14 @@ func (i *redisImpl) Register(ctx context.Context, userIdentification string, ser
 
 func (i *redisImpl) GetServers(ctx context.Context, userIdentifications []string) ([]string, error) {
 	servers := make([]string, 0)
+
 	for _, id := range userIdentifications {
 		svs, err := i.redisCli.SMembers(ctx, id).Result()
 		if err != nil {
-			logger.Errorf("error set redis: %s", err)
+			logger.WithFields(logger.Fields{
+				"error":               err,
+				"user_identification": id,
+			}).Errorf("Failed to get servers from Redis for user, continuing")
 			continue
 		}
 		servers = append(servers, svs...)
