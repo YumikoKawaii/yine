@@ -23,8 +23,12 @@ type Handler struct {
 	worker           uow.IWorker
 }
 
-func NewHandler() *Handler {
-	return &Handler{}
+func NewHandler(registry connection_registry.Registry, publisher pubsub.Publisher, worker uow.IWorker) *Handler {
+	return &Handler{
+		connRegistry:     registry,
+		messagePublisher: publisher,
+		worker:           worker,
+	}
 }
 
 func (h *Handler) SendMessage(ctx context.Context, request *api.SendMessageRequest) (*api.SendMessageResponse, error) {
@@ -49,7 +53,7 @@ func (h *Handler) SendMessage(ctx context.Context, request *api.SendMessageReque
 		lo.ForEach(userConversations, func(item models.UserConversation, _ int) {
 			userIdentifications = append(userIdentifications, item.UserIdentification)
 		})
-		servers, err := h.connRegistry.GetServers(userIdentifications)
+		servers, err := h.connRegistry.GetServers(ctx, userIdentifications)
 		if err != nil {
 			return err
 		}

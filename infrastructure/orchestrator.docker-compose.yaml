@@ -11,8 +11,49 @@ services:
       - "4318:4318"    # OTLP HTTP
       - "4317:4317"    # OTLP gRPC
     networks:
-      - tracing
+      - orchestrator
+
+  mysql:
+    image: mysql:8.0
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-authentication-plugin=mysql_native_password
+    container_name: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=orchestrator
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_ROOT_HOST=%
+    ports:
+      - "3306:3306"
+    volumes:
+      - ../../volumes/mysql-data:/var/lib/mysql
+    networks:
+      - orchestrator
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ../../volumes/redis-data:/data
+    networks:
+      - orchestrator
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mysql-data:
+  redis-data:
 
 networks:
-  tracing:
+  orchestrator:
     driver: bridge

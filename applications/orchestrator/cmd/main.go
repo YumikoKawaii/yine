@@ -1,8 +1,8 @@
 package main
 
 import (
+	"github.com/YumikoKawaii/shared/logger"
 	"github.com/spf13/cobra"
-	"yumiko_kawaii.com/yine/applications/orchestrator/pkg/logger"
 	"yumiko_kawaii.com/yine/applications/orchestrator/serve"
 )
 

@@ -28,7 +28,7 @@ func Load() (*Config, error) {
 		viper.AddConfigPath(root.Path)
 	}
 
-	viper.AddConfigPath("./float-lending-bff")
+	viper.AddConfigPath("./")
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "__"))
 	viper.AutomaticEnv()
 	/**
