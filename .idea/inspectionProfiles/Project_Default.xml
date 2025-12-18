@@ -6,5 +6,6 @@
         <function importPath="yumiko_kawaii.com/yine/applications/orchestrator/pkg/logger" name="NewLogger" />
       </functions>
     </inspection_tool>
+    <inspection_tool class="SqlNoDataSourceInspection" enabled="false" level="WARNING" enabled_by_default="false" />
   </profile>
 </component>
