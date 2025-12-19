@@ -3,6 +3,7 @@ package interceptor
 import (
 	"context"
 
+	"github.com/YumikoKawaii/shared/logger"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/codes"
 	semconv "go.opentelemetry.io/otel/semconv/v1.17.0"
@@ -59,19 +60,21 @@ func (i *tracerImpl) Unary(ctx context.Context, request interface{}, info *grpc.
 		ctx = otel.GetTextMapPropagator().Extract(ctx, &metadataCarrier{md: md})
 	}
 
-	// Start span
 	ctx, span := i.tracer.Start(ctx, info.FullMethod,
 		trace.WithSpanKind(trace.SpanKindServer),
 	)
 	defer span.End()
 
-	// Add standard gRPC attributes
 	span.SetAttributes(
 		semconv.RPCSystemGRPC,
 		semconv.RPCService(info.FullMethod),
 	)
 
-	// Execute handler
+	spanCtx := span.SpanContext()
+	traceID := spanCtx.TraceID().String()
+	spanID := spanCtx.SpanID().String()
+	logger.Infof("Handling request - TraceID: %s, SpanID: %s, Method: %s", traceID, spanID, info.FullMethod)
+
 	resp, err := handler(ctx, request)
 
 	// Record status

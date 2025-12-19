@@ -2,19 +2,14 @@ package serve
 
 import (
 	"context"
-	"time"
 
 	"github.com/YumikoKawaii/shared/logger"
 	"github.com/YumikoKawaii/shared/mysql"
 	"github.com/YumikoKawaii/shared/redis"
+	otel_tracer "github.com/YumikoKawaii/shared/tracer"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/recovery"
 	grpc_validator "github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/validator"
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
-	"go.opentelemetry.io/otel/sdk/resource"
-	otel_sdk "go.opentelemetry.io/otel/sdk/trace"
-	semconv "go.opentelemetry.io/otel/semconv/v1.17.0"
 	"yumiko_kawaii.com/yine/applications/orchestrator/handlers/connection_registry"
 	"yumiko_kawaii.com/yine/applications/orchestrator/handlers/receiver"
 	"yumiko_kawaii.com/yine/applications/orchestrator/handlers/streamer"
@@ -37,53 +32,8 @@ func ServeReceiver(_ *cobra.Command, _ []string) {
 	logger.Infof("Starting Receiver service initialization")
 
 	ctx := context.Background()
-	exporter, err := otlptracehttp.New(
-		ctx,
-		otlptracehttp.WithEndpoint("localhost:4318"),
-		otlptracehttp.WithInsecure(),
-	)
-	if err != nil {
-		logger.WithFields(logger.Fields{"error": err}).Fatalf("Failed to create OTLP exporter")
-	}
-
-	res, err := resource.New(
-		ctx,
-		resource.WithAttributes(
-			semconv.ServiceName("receiver"),
-		),
-	)
-	if err != nil {
-		logger.WithFields(logger.Fields{"error": err}).Fatalf("Failed to create resource")
-	}
-
-	tp := otel_sdk.NewTracerProvider(
-		otel_sdk.WithBatcher(
-			exporter,
-			otel_sdk.WithMaxExportBatchSize(512),
-			otel_sdk.WithBatchTimeout(5*time.Second),
-			otel_sdk.WithMaxQueueSize(2048),
-		),
-		// Service metadata
-		otel_sdk.WithResource(res),
-
-		// Sampling strategy
-		otel_sdk.WithSampler(otel_sdk.TraceIDRatioBased(0.1)), // Sample 10%
-
-		// Span limits
-		otel_sdk.WithRawSpanLimits(otel_sdk.SpanLimits{
-			AttributeCountLimit:         128,
-			EventCountLimit:             128,
-			LinkCountLimit:              128,
-			AttributePerEventCountLimit: 128,
-			AttributePerLinkCountLimit:  128,
-		}),
-	)
-	otel.SetTracerProvider(tp)
-	tracer := otel.Tracer("receiver_tracer")
-
-	logger.WithFields(logger.Fields{
-		"sampling_rate": 0.1,
-	}).Infof("OpenTelemetry tracer initialized")
+	tracer, err := otel_tracer.Initialize(ctx, &conf.TracerConfig)
+	logger.Infof("OpenTelemetry tracer initialized")
 
 	traceInterceptor := interceptor.NewTracer(tracer)
 
@@ -104,7 +54,10 @@ func ServeReceiver(_ *cobra.Command, _ []string) {
 
 	logger.Infof("Initializing database and Redis connections")
 	db := mysql.Initialize(&conf.MysqlCfg)
-	redisCli := redis.Initialize(conf.RedisCfg)
+	redisCli, err := redis.Initialize(conf.RedisCfg)
+	if err != nil {
+		logger.Fatalf("error connecting redis: %s", err.Error())
+	}
 	dbWorker := uow.New(db)
 	connectionRegistry := connection_registry.NewRegistry(redisCli)
 	messagePublisher := redis.NewPublisher(redisCli)
